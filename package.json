@@ -1,0 +1,44 @@
+{
+  "name": "react-dead-components",
+  "version": "0.1.0",
+  "description": "Find dead components in your react project",
+  "main": "index.js",
+  "engines": {
+    "node": ">=4.5.0",
+    "npm": "^3.0.0"
+  },
+  "scripts": {
+    "lint": "eslint bin build config server src tests",
+    "test": "better-npm-run test"
+  },
+  "betterScripts": {
+    "test": {
+      "command": "node ./node_modules/karma/bin/karma start config/karma.config",
+      "env": {
+        "NODE_ENV": "test",
+        "DEBUG": "app:*"
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:techcoop/react-dead-components.git"
+  },
+  "author": "Colin Gagnon <colin@techcoop.group> (https://techcoop.group)",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^15.0.0",
+    "better-npm-run": "0.0.13"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "eslint": "^3.0.1",
+    "eslint-config-standard": "^6.0.0",
+    "eslint-plugin-standard": "^2.0.0",
+    "karma": "^1.0.0",
+    "karma-coverage": "^1.0.0",
+    "karma-mocha": "^1.0.1",
+    "karma-mocha-reporter": "^2.0.0",
+    "mocha": "^3.0.1"
+  }
+}

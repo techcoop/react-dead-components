@@ -1,0 +1,21 @@
+{
+  "parser": "eslint",
+  "extends": [
+    "standard"
+  ],
+  "plugins": [
+  ],
+  "env": {
+    "browser" : true
+  },
+  "globals": {
+    "__DEV__"      : false,
+    "__TEST__"     : false,
+    "__PROD__"     : false,
+    "__COVERAGE__" : false
+  },
+  "rules": {
+    "key-spacing"          : 0,
+    "max-len"              : [2, 120, 2]
+  }
+}

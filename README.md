@@ -1,7 +1,6 @@
-# react-dead-components
+# react-project-analyzer
 
-Searches a directory for react components that appear to be unused in any other components, 
-left behind on the battlefield by some uncaring soul.
+Analyzes react projects to detect ununsed components and grades reuse
 
 ## Requirements
 * node `^4.5.0`

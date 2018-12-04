@@ -31,4 +31,6 @@ Completely terrible repo, will have virtually no time put into it, use at your o
 
 
 ## Authors
-[Colin Gagnon]
+[Colin Gagnon][admin]
+
+[admin]: https://github.com/colingagnon

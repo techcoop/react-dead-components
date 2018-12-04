@@ -1,10 +1,8 @@
-import React, { Component } from 'react'
-import ChildComponent from './ChildComponent'
+import React from 'react'
+import { usedFormatter } from './utils'
 
-class ChildComponent extends Component {
-  render() {
-    return (<div></div>)
-  }
-}
+export const ChildComponent = props => (
+  <div>{usedFormatter(this.props.test)}</div>
+)
 
 export default ChildComponent

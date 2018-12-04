@@ -1,4 +1,5 @@
 import glob from 'glob'
+import { resolve } from 'path'
 import { existsSync } from 'fs'
 import { getFiles, parseFile } from './utils'
 
@@ -20,30 +21,90 @@ if (!existsSync(dir)) {
   process.exit()
 }
 
+const min_index = process.argv.indexOf('--min')
+let min = 0
+if (min_index !== -1 && min_index + 1 <= process.argv.length) {
+  min = process.argv[min_index + 1]
+}
+
 // First get all files
 const filesPaths = glob.sync(`${dir}/**/+(*.js|*.jsx)`, {'ignore': [`${dir}/node_modules/**`]})
 
 // Get the contents of all files and parse them
 // TODO this has a weird issue, need to return file path with the promise instead of using filesPaths arrays
-console.log(`Starting project analysis in: ${dir}`)
+console.log(`Starting project analysis in: ${dir}\n`)
 getFiles(filesPaths).then(files => {
   
   // Parse files
-  const data = new Map()
+  const components = new Map()
+  const imports = new Map()
+  const exports = new Map()
+
   files.forEach((file, index) => {
     const parsed = parseFile(file.toString(), filesPaths[index])
-    if (parsed) {
-      data.set(parsed.name, parsed)
+    if (!parsed) {
+      return
+    }
+
+    if (parsed.exports) {
+      parsed.exports.map(item => {
+        item = resolve(item)
+        if (exports.has(item)) {
+          exports.set(item, exports.get(item) + 1)
+        } else {
+          exports.set(item, 1)
+        }
+      })
+    }
+
+    if (parsed.imports) {
+      parsed.imports.map(item => {
+        item = resolve(item)
+        if (imports.has(item)) {
+          imports.set(item, imports.get(item) + 1)
+        } else {
+          imports.set(item, 1)
+        }
+      })
+    }
+
+  })
+  
+  const unused = {}
+  exports.forEach((count, key) => {
+    if (!imports.has(key)) {
+      count = 0 
+    }
+
+    if (!unused[count]) {
+      unused[count] = []
+    }
+
+    unused[count].push(key)
+  })
+
+  Object.keys(unused).map((count) => {
+    count = parseInt(count)
+    if (count <= min) {
+      console.log(`\n\nOccurences (${count})\n`)
+      unused[count].map(item => {
+        console.log(`${item}`)
+      })
+      console.log(`\n\n`)
     }
   })
 
+
+
+
+  /*
   // Iterate and count instances of components
   data.forEach((file, name) => {
     //console.log(`\n\nCOMPONENT: ${name}`)
     data.forEach((file2, name2) => {
       //console.log(`Child: ${name2}`)
-      //console.log(`Tags:`, file2.tags)
-      if (file2.tags.has(`<${name}>`)) {
+      //console.log(`Components:`, file2.components)
+      if (file2.components.has(`<${name}>`)) {
         //console.log('\nHAS\n')
         file.count++
       }
@@ -61,6 +122,7 @@ getFiles(filesPaths).then(files => {
     }
   })
   console.log(`\n\n`)
+  */
 }, err => {
   console.error(err)
 })
